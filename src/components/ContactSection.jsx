@@ -77,12 +77,26 @@ export default function ContactSection() {
             {/* Timings Card */}
             <div className="contact-info-card">
               <div className="contact-icon-box">
-                <Clock size={22} className="text-orange" />
+                <Clock size={20} className="text-orange" />
               </div>
               <div className="contact-details-box">
                 <h4>Daily Operating Hours</h4>
-                <p><strong>Mon – Sat:</strong> 5:30 AM – 10:00 PM (Continuous)</p>
-                <p><strong>Sunday:</strong> 6:00 AM – 10:00 AM (Special Session)</p>
+                <div className="contact-hours-list">
+                  <div className="contact-hours-item">
+                    <div className="hours-head">
+                      <span className="hours-day-name">Mon – Sat</span>
+                      <span className="hours-chip chip-continuous">Continuous</span>
+                    </div>
+                    <div className="hours-time-range">5:30 AM – 10:00 PM</div>
+                  </div>
+                  <div className="contact-hours-item">
+                    <div className="hours-head">
+                      <span className="hours-day-name">Sunday</span>
+                      <span className="hours-chip chip-special">Special Batch</span>
+                    </div>
+                    <div className="hours-time-range">6:00 AM – 10:00 AM</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -186,11 +200,14 @@ export default function ContactSection() {
               <button
                 type="submit"
                 className="btn btn-whatsapp form-submit-btn"
-                style={{ width: '100%' }}
               >
                 <i className="fa-brands fa-whatsapp" style={{ fontSize: '1.25rem' }}></i>
-                <span>Submit &amp; Chat on WhatsApp (+91 97121 29393)</span>
+                <span>Confirm &amp; Chat on WhatsApp</span>
               </button>
+              <div className="form-submit-note">
+                <i className="fa-solid fa-bolt text-whatsapp"></i>
+                <span>Direct desk dispatch to +91 97121 29393</span>
+              </div>
             </form>
           </div>
         </div>

@@ -1,10 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, X, Send, Sparkles, Clock, ShieldCheck, Dumbbell } from 'lucide-react';
 import { openWhatsApp, WA_TEMPLATES, WHATSAPP_NUMBER } from '../utils/whatsapp';
 
 export default function FloatingWhatsApp() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputQuery, setInputQuery] = useState('');
+  const [isContactVisible, setIsContactVisible] = useState(false);
+  const [isScrollDownHidden, setIsScrollDownHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    let scrollStopTimer;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const contactEl = document.getElementById('contact');
+      const footerEl = document.querySelector('.footer-wrap');
+      const winHeight = window.innerHeight;
+
+      const contactRect = contactEl?.getBoundingClientRect();
+      const footerRect = footerEl?.getBoundingClientRect();
+
+      // Contact or footer is currently in viewport
+      const contactInView = contactRect && contactRect.top < winHeight - 60 && contactRect.bottom > 80;
+      const footerInView = footerRect && footerRect.top < winHeight - 60;
+
+      setIsContactVisible(Boolean(contactInView || footerInView));
+
+      // Scroll direction: when scrolling down, hide button so it never covers cards/text
+      if (currentScrollY > lastScrollY.current + 12 && currentScrollY > 120) {
+        setIsScrollDownHidden(true);
+      } else if (currentScrollY < lastScrollY.current - 8 || currentScrollY < 80) {
+        setIsScrollDownHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+
+      // Bring button back 1.2s after user stops scrolling (if not in contact section)
+      clearTimeout(scrollStopTimer);
+      scrollStopTimer = setTimeout(() => {
+        setIsScrollDownHidden(false);
+      }, 1200);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      clearTimeout(scrollStopTimer);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   const handleSendCustom = (e) => {
     e.preventDefault();
@@ -38,8 +86,13 @@ export default function FloatingWhatsApp() {
     }
   };
 
+  const shouldHide = (isContactVisible || isScrollDownHidden) && !isOpen;
+
   return (
-    <aside className="floating-whatsapp-wrap" aria-label="WhatsApp Direct Support">
+    <aside 
+      className={`floating-whatsapp-wrap ${shouldHide ? 'floating-whatsapp-hidden' : ''}`} 
+      aria-label="WhatsApp Direct Support"
+    >
       {/* Floating CTA pill tooltip */}
       {!isOpen && (
         <div 

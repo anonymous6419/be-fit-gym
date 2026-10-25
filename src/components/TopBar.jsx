@@ -19,8 +19,8 @@ export default function TopBar({ liveStatus, onOpenTrialModal }) {
           </div>
         </div>
 
-        {/* Operating Hours */}
-        <div className="top-bar-hours">
+        {/* Operating Hours (Scoped to desktop to prevent mobile header blowout) */}
+        <div className="top-bar-hours desktop-only-hours">
           <Clock className="top-bar-icon text-orange" size={14} />
           <span>
             Mon - Sat: <strong>5:30 AM - 10:00 PM</strong> | Sun: <strong>6:00 AM - 10:00 AM</strong>
