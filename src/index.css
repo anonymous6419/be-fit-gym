@@ -1024,7 +1024,6 @@ ul {
   overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  aspect-ratio: 4 / 3;
   cursor: pointer;
 }
 
